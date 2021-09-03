@@ -1,8 +1,6 @@
 package org.example.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,13 +8,15 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.example.server.handler.FirstServerHandler;
 
 /**
  * 服务器职责
  * 1、启动服务，使服务可用
+ * 2、能够接受来自客户端的连接
  */
 public class NettyServer {
-
+    private static final int PORT = 18080;
     public static void main(String[] args) {
         // 定义线程工作组
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -31,14 +31,15 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-                        System.out.println("服务器启动中......");
+                        System.out.println("服务器连接初始化......");
+                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE);
         serverBootstrap
                 // 绑定端口
-                .bind(18080)
+                .bind(PORT)
                 // 添加监听器,监听端口是否绑定成功
                 .addListener(new GenericFutureListener<Future<? super Void>>() {
             @Override
