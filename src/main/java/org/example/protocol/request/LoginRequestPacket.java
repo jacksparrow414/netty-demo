@@ -1,14 +1,16 @@
-package org.example.protocol.command;
+package org.example.protocol.request;
 
 import lombok.Data;
+import org.example.protocol.command.Command;
+import org.example.protocol.Packet;
 
 /**
  * 具体的请求包
  */
 @Data
-public class LoginRequestPacket extends Packet{
+public class LoginRequestPacket extends Packet {
 
-    private Integer userId;
+    private String userId;
 
     private String username;
 

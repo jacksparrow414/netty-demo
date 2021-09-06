@@ -1,7 +1,9 @@
-package org.example.protocol.command;
+package org.example.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import org.example.protocol.Packet;
+import org.example.protocol.request.LoginRequestPacket;
 import org.example.serialize.Serializer;
 import org.example.serialize.impl.JSONSerializer;
 
