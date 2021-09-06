@@ -19,6 +19,14 @@ import java.util.UUID;
  */
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
+    /**
+     * 代表TCP连接的建立成功，
+     * 通常我们在这个回调里面统计单机的连接数，
+     * channelActive() 被调用，连接数加一，
+     * channelInActive 代表TCP连接释放
+     * channelInActive() 被调用，连接数减一
+     * @param ctx
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         System.out.println(new Date() + ":客户端开始登录......");

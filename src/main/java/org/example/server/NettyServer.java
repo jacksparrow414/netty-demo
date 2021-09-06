@@ -10,6 +10,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
+import org.example.server.handler.AuthHandler;
 import org.example.server.handler.LoginRequestHandler;
 import org.example.server.handler.MessageRequestHandler;
 
@@ -40,6 +41,7 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new AuthHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
                     }
                 })
@@ -49,13 +51,10 @@ public class NettyServer {
                 // 绑定端口
                 .bind(PORT)
                 // 添加监听器,监听端口是否绑定成功
-                .addListener(new GenericFutureListener<Future<? super Void>>() {
-            @Override
-            public void operationComplete(Future<? super Void> future) throws Exception {
-                if (future.isSuccess()) {
-                    System.out.println("端口绑定成功，服务器启动成功");
-                }
-            }
-        });
+                .addListener(future -> {
+                    if (future.isSuccess()) {
+                        System.out.println("端口绑定成功，服务器启动成功");
+                    }
+                });
     }
 }

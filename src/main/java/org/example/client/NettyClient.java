@@ -58,6 +58,7 @@ public class NettyClient {
 
     /**
      * 连接，包含自动重连.重连就是递归调用自己
+     * 连接之后输入信息
      * @param bootstrap bootstrap
      * @param host IP
      * @param port 端口
@@ -97,16 +98,17 @@ public class NettyClient {
     private static void startConsoleThread(Channel channel) {
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
+                // 服务器端有org.example.server.handler.AuthHandler 来处理验证并且采取热插拔，所以这里就不需要验证了
+//                if (LoginUtil.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务端: ");
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
-
+// 将编码、解码封装起来之后无需再手动转ByteBuf
 //                    MessageRequestPacket packet = new MessageRequestPacket();
 //                    packet.setMessage(line);
 //                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
                     channel.writeAndFlush(new MessageRequestPacket(line));
-                }
+//                }
             }
         }).start();
     }
