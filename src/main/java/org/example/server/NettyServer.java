@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.example.server.handler.FirstServerHandler;
+import org.example.server.handler.ServerHandler;
 
 /**
  * 服务器职责
@@ -32,7 +33,8 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         System.out.println("服务器连接初始化......");
-                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
+//                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
+                        nioSocketChannel.pipeline().addLast(new ServerHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

@@ -1,7 +1,15 @@
 package org.example.client.handler;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.example.protocol.Packet;
+import org.example.protocol.PacketCodeC;
+import org.example.protocol.request.LoginRequestPacket;
+import org.example.protocol.response.LoginResponsePacket;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 客户端登录Handler.
@@ -9,7 +17,31 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
+    public void channelActive(ChannelHandlerContext ctx) {
+        System.out.println(new Date() + ":客户端开始登录......");
+        //构造Packet
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        loginRequestPacket.setUserId(UUID.randomUUID().toString());
+        loginRequestPacket.setUsername("jack");
+        loginRequestPacket.setPassword("123456");
+        // 获取当前连接的ByteBuf分配器，建议实际使用中这样使用
+        ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginRequestPacket);
+        // 向当前channel里开始写
+        ctx.channel().writeAndFlush(byteBuf);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        System.out.println(new Date() + ":收到服务器端消息......");
+        ByteBuf byteBuf = (ByteBuf) msg;
+        Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
+        if (packet instanceof LoginResponsePacket) {
+            LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
+            if (loginResponsePacket.getSuccess()) {
+                System.out.println(loginResponsePacket.getReason());
+            }else {
+                System.out.println("登录失败,原因为:" + loginResponsePacket.getReason());
+            }
+        }
     }
 }

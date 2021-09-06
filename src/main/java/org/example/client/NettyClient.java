@@ -6,6 +6,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.example.client.handler.ClientHandler;
 import org.example.client.handler.FirstClientHandler;
 
 import java.util.Date;
@@ -32,7 +33,8 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         System.out.println("客户端初始化连接......");
-                        socketChannel.pipeline().addLast(new FirstClientHandler());
+//                        socketChannel.pipeline().addLast(new FirstClientHandler());
+                        socketChannel.pipeline().addLast(new ClientHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
@@ -40,7 +42,7 @@ public class NettyClient {
                 // 这里是TCP的连接超时时间,而不是客户端真正连接上服务器的时间，与下面的重连不冲突
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000);
         // 客户端失败重连
-        connect(bootstrap, HOST, 18078, MAX_RETRY);
+        connect(bootstrap, HOST, 18079, MAX_RETRY);
     }
 
     /**

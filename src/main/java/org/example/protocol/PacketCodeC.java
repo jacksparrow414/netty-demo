@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.example.protocol.Packet;
 import org.example.protocol.request.LoginRequestPacket;
+import org.example.protocol.response.LoginResponsePacket;
 import org.example.serialize.Serializer;
 import org.example.serialize.impl.JSONSerializer;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.example.protocol.command.Command.LOGIN_REQUEST;
+import static org.example.protocol.command.Command.LOGIN_RESPONSE;
 
 /**
  * 对数据包进行编码、解码.
@@ -18,12 +20,14 @@ import static org.example.protocol.command.Command.LOGIN_REQUEST;
 public class PacketCodeC {
 
     private static final int MAGIC_NUMBER = 0x12345678;
+    public static final PacketCodeC INSTANCE = new PacketCodeC();
     private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
     private static final Map<Byte, Serializer> serializerMap;
 
     static {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -32,12 +36,13 @@ public class PacketCodeC {
 
     /**
      * 编码.
-     * @param packet
+     * @param packet 数据包对象
+     * @param byteBufAllocator ByteBuf分配器
      * @return
      */
-    public ByteBuf encode(Packet packet) {
+    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
         // 创建ByteBuf对象
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
         // 序列化Java对象,序列化为byte数组
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
@@ -82,7 +87,7 @@ public class PacketCodeC {
         Class<? extends Packet> requestType = getRequestType(command);
         if (serializer != null && requestType != null) {
             // 反序列化为Java对象
-            serializer.deserialize(requestType, bytes);
+            return serializer.deserialize(requestType, bytes);
         }
         return null;
     }
