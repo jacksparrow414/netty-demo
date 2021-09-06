@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.example.protocol.Packet;
 import org.example.protocol.request.LoginRequestPacket;
+import org.example.protocol.request.MessageRequestPacket;
 import org.example.protocol.response.LoginResponsePacket;
+import org.example.protocol.response.MessageResponsePacket;
 import org.example.serialize.Serializer;
 import org.example.serialize.impl.JSONSerializer;
 
@@ -13,6 +15,8 @@ import java.util.Map;
 
 import static org.example.protocol.command.Command.LOGIN_REQUEST;
 import static org.example.protocol.command.Command.LOGIN_RESPONSE;
+import static org.example.protocol.command.Command.MESSAGE_REQUEST;
+import static org.example.protocol.command.Command.MESSAGE_RESPONSE;
 
 /**
  * 对数据包进行编码、解码.
@@ -28,6 +32,8 @@ public class PacketCodeC {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

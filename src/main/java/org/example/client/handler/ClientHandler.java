@@ -7,6 +7,8 @@ import org.example.protocol.Packet;
 import org.example.protocol.PacketCodeC;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.response.LoginResponsePacket;
+import org.example.protocol.response.MessageResponsePacket;
+import org.example.util.LoginUtil;
 
 import java.util.Date;
 import java.util.UUID;
@@ -39,9 +41,13 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
             if (loginResponsePacket.getSuccess()) {
                 System.out.println(loginResponsePacket.getReason());
+                LoginUtil.markAsLogin(ctx.channel());
             }else {
                 System.out.println("登录失败,原因为:" + loginResponsePacket.getReason());
             }
+        }else if (packet instanceof MessageResponsePacket) {
+            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
+            System.out.println(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
         }
     }
 }
