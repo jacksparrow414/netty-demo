@@ -22,6 +22,10 @@ public class FirstClientHandler extends ChannelInboundHandlerAdapter {
         Channel channel = ctx.channel();
         ByteBuf byteBuf = getByteBuf(ctx);
         // netty中数据是以ByteBuf为单位
+        // ByteBuf 中有readerIndex读指针、writerIndex写指针、capacity容量、maxCapacity最大容量
+        // 每读一个字节,readerIndex + 1;
+        // 每写一个字节,writerIndex + 1;
+        // 可读字节 = writerIndex - readerIndex
         channel.writeAndFlush(byteBuf);
     }
 
