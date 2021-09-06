@@ -23,7 +23,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
         MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
         messageResponsePacket.setFromUserId(session.getUserId());
         messageResponsePacket.setFromUserName(session.getUserName());
-
+        messageResponsePacket.setMessage(messageRequestPacket.getMessage());
         // 拿到消息接收方的channel
         Channel toUserChannel = SessionUtil.getChannel(messageRequestPacket.getToUserId());
 
