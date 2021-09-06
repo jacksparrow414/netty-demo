@@ -8,6 +8,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 继承ChannelInboundHandlerAdapter这种方式需要自己手动释放内存.
+ */
 public class FirstClientHandler extends ChannelInboundHandlerAdapter {
 
     /**

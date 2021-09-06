@@ -1,7 +1,6 @@
 package org.example.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -9,9 +8,9 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.example.client.handler.ClientHandler;
-import org.example.client.handler.FirstClientHandler;
-import org.example.protocol.PacketCodeC;
+import org.example.client.handler.LoginResponseHandler;
+import org.example.client.handler.MessageResponseHandler;
+import org.example.codec.PacketEncoderAndDecoder;
 import org.example.protocol.request.MessageRequestPacket;
 import org.example.util.LoginUtil;
 
@@ -41,7 +40,10 @@ public class NettyClient {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         System.out.println("客户端初始化连接......");
 //                        socketChannel.pipeline().addLast(new FirstClientHandler());
-                        socketChannel.pipeline().addLast(new ClientHandler());
+//                        socketChannel.pipeline().addLast(new ClientHandler());
+                        socketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
+                        socketChannel.pipeline().addLast(new LoginResponseHandler());
+                        socketChannel.pipeline().addLast(new MessageResponseHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
@@ -98,10 +100,10 @@ public class NettyClient {
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
+//                    MessageRequestPacket packet = new MessageRequestPacket();
+//                    packet.setMessage(line);
+//                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();

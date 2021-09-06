@@ -69,6 +69,31 @@ public class PacketCodeC {
     }
 
     /**
+     * 直接传入ByteBuf.
+     * @param byteBuf
+     * @param packet
+     * @return
+     */
+    public void encodeByteBuf(ByteBuf byteBuf, Packet packet) {
+        // 序列化Java对象,序列化为byte数组
+        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+
+        // 构造数据包
+        // 1. 魔数 int 4个字节
+        byteBuf.writeInt(MAGIC_NUMBER);
+        // 2. 版本号 1个字节
+        byteBuf.writeByte(packet.getVersion());
+        // 3. 序列化算法 1个字节
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        // 4. 指令 1个字节
+        byteBuf.writeByte(packet.getCommand());
+        // 5. 数据长度
+        byteBuf.writeInt(bytes.length);
+        // 6. 真正的数据
+        byteBuf.writeBytes(bytes);
+    }
+
+    /**
      * 解码.
      * @param byteBuf
      * @return

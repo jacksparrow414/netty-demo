@@ -8,8 +8,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import org.example.server.handler.FirstServerHandler;
-import org.example.server.handler.ServerHandler;
+import org.example.codec.PacketEncoderAndDecoder;
+import org.example.server.handler.LoginRequestHandler;
+import org.example.server.handler.MessageRequestHandler;
 
 /**
  * 服务器职责
@@ -34,7 +35,10 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         System.out.println("服务器连接初始化......");
 //                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
-                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+//                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+                        nioSocketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
+                        nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

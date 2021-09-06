@@ -15,6 +15,7 @@ import java.util.UUID;
 
 /**
  * 客户端登录Handler.
+ * 继承ChannelInboundHandlerAdapter这种方式需要自己手动释放内存.
  */
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -49,5 +50,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
             System.out.println(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
         }
+        // 事件传播，如果不是当前处理的packet，直接向下一个handler进行传递
+//        ctx.fireChannelRead(packet)
     }
 }
