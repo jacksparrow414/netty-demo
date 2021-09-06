@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.example.client.handler.LoginResponseHandler;
 import org.example.client.handler.MessageResponseHandler;
 import org.example.codec.PacketEncoderAndDecoder;
+import org.example.codec.Spliter;
 import org.example.protocol.request.MessageRequestPacket;
 import org.example.util.LoginUtil;
 
@@ -41,6 +42,7 @@ public class NettyClient {
                         System.out.println("客户端初始化连接......");
 //                        socketChannel.pipeline().addLast(new FirstClientHandler());
 //                        socketChannel.pipeline().addLast(new ClientHandler());
+                        socketChannel.pipeline().addLast(new Spliter());
                         socketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
                         socketChannel.pipeline().addLast(new MessageResponseHandler());

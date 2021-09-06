@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.example.codec.PacketEncoderAndDecoder;
+import org.example.codec.Spliter;
 import org.example.server.handler.LoginRequestHandler;
 import org.example.server.handler.MessageRequestHandler;
 
@@ -36,6 +37,7 @@ public class NettyServer {
                         System.out.println("服务器连接初始化......");
 //                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
 //                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+                        nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
