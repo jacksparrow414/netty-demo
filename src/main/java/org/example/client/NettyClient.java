@@ -12,8 +12,10 @@ import org.example.client.handler.LoginResponseHandler;
 import org.example.client.handler.MessageResponseHandler;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
+import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.request.MessageRequestPacket;
 import org.example.util.LoginUtil;
+import org.example.util.SessionUtil;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -51,7 +53,7 @@ public class NettyClient {
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
                 .option(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                 // 这里是TCP的连接超时时间,而不是客户端真正连接上服务器的时间，与下面的重连不冲突
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000);
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 300000000);
         // 客户端失败重连
         connect(bootstrap, HOST, 18079, MAX_RETRY);
     }
@@ -73,7 +75,9 @@ public class NettyClient {
                         System.out.println((new Date() + ":客户端连接服务器端成功"));
                         // 连接成功之后，启动控制台输入信息
                         Channel channel = ((ChannelFuture) future).channel();
-                        startConsoleThread(channel);
+//                        startConsoleThread(channel);
+                        // 登录
+                        OneToOneLoginAndSendMessage(channel);
                     }else if(retry == 0) {
                         System.err.println("重连次数已用完......");
                     } else {
@@ -111,5 +115,37 @@ public class NettyClient {
 //                }
             }
         }).start();
+    }
+
+    private static void OneToOneLoginAndSendMessage(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!SessionUtil.hasSession(channel)) {
+                    System.out.print("输入用户名登录: ");
+                    String username = sc.nextLine();
+                    loginRequestPacket.setUsername(username);
+
+                    // 密码使用默认的
+                    loginRequestPacket.setPassword("pwd");
+
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    String toUserId = sc.next();
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
+            }
+        }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }
