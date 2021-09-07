@@ -29,7 +29,7 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
 //    }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket loginResponsePacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket loginResponsePacket) {
         if (loginResponsePacket.getSuccess()) {
             System.out.println(loginResponsePacket.getReason());
             LoginUtil.markAsLogin(ctx.channel());

@@ -16,10 +16,9 @@ public class FirstClientHandler extends ChannelInboundHandlerAdapter {
     /**
      * 当连接可用时.
      * @param ctx
-     * @throws Exception
      */
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         System.out.println("客户端开始写数据......");
         // 拿到该条连接的channel
         Channel channel = ctx.channel();

@@ -14,7 +14,7 @@ import java.util.Date;
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) {
         System.out.println(new Date() + ": 收到客户端消息: " + messageRequestPacket.getMessage());
 
         // 1.拿到消息发送方的会话信息

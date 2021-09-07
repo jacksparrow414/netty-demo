@@ -14,7 +14,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) {
-        System.out.println("LoginRequestPacket 解析成功......");
         // 回复给客户端
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         loginResponsePacket.setSuccess(true);
@@ -31,7 +30,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         SessionUtil.unBindSession(ctx.channel());
     }
 

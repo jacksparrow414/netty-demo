@@ -15,10 +15,9 @@ public class FirstServerHandler extends ChannelInboundHandlerAdapter {
      * 在连接中读取数据.
      * @param ctx
      * @param msg
-     * @throws Exception
      */
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
         System.out.println(new Date() + ": 服务器读取到数据:" + byteBuf.toString(Charset.defaultCharset()));
         ctx.channel().writeAndFlush(getByteBuf(ctx));
