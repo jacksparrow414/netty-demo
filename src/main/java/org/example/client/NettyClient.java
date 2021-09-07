@@ -8,12 +8,16 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.example.client.console.ConsoleCommandManager;
+import org.example.client.console.LoginConsoleCommand;
+import org.example.client.handler.CreateGroupResponseHandler;
 import org.example.client.handler.LoginResponseHandler;
 import org.example.client.handler.MessageResponseHandler;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.request.MessageRequestPacket;
+import org.example.server.handler.CreateGroupRequestHandler;
 import org.example.util.LoginUtil;
 import org.example.util.SessionUtil;
 
@@ -48,6 +52,7 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
                         socketChannel.pipeline().addLast(new MessageResponseHandler());
+                        socketChannel.pipeline().addLast(new CreateGroupResponseHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
@@ -76,8 +81,10 @@ public class NettyClient {
                         // 连接成功之后，启动控制台输入信息
                         Channel channel = ((ChannelFuture) future).channel();
 //                        startConsoleThread(channel);
-                        // 登录
-                        OneToOneLoginAndSendMessage(channel);
+                        // 登录,一对一单聊
+//                        OneToOneLoginAndSendMessage(channel);
+                        // 登录，群聊
+                        OneToManyLoginAndSendMessage(channel);
                     }else if(retry == 0) {
                         System.err.println("重连次数已用完......");
                     } else {
@@ -137,6 +144,22 @@ public class NettyClient {
                     String toUserId = sc.next();
                     String message = sc.next();
                     channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
+            }
+        }).start();
+    }
+
+    private static void OneToManyLoginAndSendMessage(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!SessionUtil.hasSession(channel)) {
+                    loginConsoleCommand.exec(sc, channel);
+                    waitForLoginResponse();
+                } else {
+                    consoleCommandManager.exec(sc, channel);
                 }
             }
         }).start();

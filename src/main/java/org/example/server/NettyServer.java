@@ -11,6 +11,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
+import org.example.server.handler.CreateGroupRequestHandler;
 import org.example.server.handler.LoginRequestHandler;
 import org.example.server.handler.MessageRequestHandler;
 
@@ -43,6 +44,7 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new AuthHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new CreateGroupRequestHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

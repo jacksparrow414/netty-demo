@@ -3,8 +3,10 @@ package org.example.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.example.protocol.Packet;
+import org.example.protocol.request.CreateGroupRequestPacket;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.request.MessageRequestPacket;
+import org.example.protocol.response.CreateGroupResponsePacket;
 import org.example.protocol.response.LoginResponsePacket;
 import org.example.protocol.response.MessageResponsePacket;
 import org.example.serialize.Serializer;
@@ -13,6 +15,8 @@ import org.example.serialize.impl.JSONSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.example.protocol.command.Command.CREATE_GROUP_REQUEST;
+import static org.example.protocol.command.Command.CREATE_GROUP_RESPONSE;
 import static org.example.protocol.command.Command.LOGIN_REQUEST;
 import static org.example.protocol.command.Command.LOGIN_RESPONSE;
 import static org.example.protocol.command.Command.MESSAGE_REQUEST;
@@ -34,7 +38,8 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
-
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
