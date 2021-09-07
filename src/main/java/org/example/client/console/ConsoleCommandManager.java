@@ -13,6 +13,8 @@ public class ConsoleCommandManager implements ConsoleCommand{
     public ConsoleCommandManager() {
         consoleCommandMap =  new HashMap<>();
         consoleCommandMap.put("createGroup", new CreateGroupConsoleCommand());
+        consoleCommandMap.put("joinGroup", new JoinGroupConsoleCommand());
+        consoleCommandMap.put("quitGroup", new QuitGroupConsoleCommand());
     }
 
     @Override

@@ -11,8 +11,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.example.client.console.ConsoleCommandManager;
 import org.example.client.console.LoginConsoleCommand;
 import org.example.client.handler.CreateGroupResponseHandler;
+import org.example.client.handler.JoinGroupResponseHandler;
 import org.example.client.handler.LoginResponseHandler;
 import org.example.client.handler.MessageResponseHandler;
+import org.example.client.handler.QuitGroupResponseHandler;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
 import org.example.protocol.request.LoginRequestPacket;
@@ -53,6 +55,8 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
                         socketChannel.pipeline().addLast(new MessageResponseHandler());
                         socketChannel.pipeline().addLast(new CreateGroupResponseHandler());
+                        socketChannel.pipeline().addLast(new JoinGroupResponseHandler());
+                        socketChannel.pipeline().addLast(new QuitGroupResponseHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

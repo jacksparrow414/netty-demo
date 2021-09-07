@@ -6,14 +6,14 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
 import org.example.server.handler.CreateGroupRequestHandler;
+import org.example.server.handler.JoinGroupRequestHandler;
 import org.example.server.handler.LoginRequestHandler;
 import org.example.server.handler.MessageRequestHandler;
+import org.example.server.handler.QuitGroupRequestHandler;
 
 /**
  * 服务器职责
@@ -45,6 +45,8 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new AuthHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
                         nioSocketChannel.pipeline().addLast(new CreateGroupRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new JoinGroupRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new QuitGroupRequestHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

@@ -4,11 +4,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.example.protocol.Packet;
 import org.example.protocol.request.CreateGroupRequestPacket;
+import org.example.protocol.request.JoinGroupRequestPacket;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.request.MessageRequestPacket;
+import org.example.protocol.request.QuitGroupRequestPacket;
 import org.example.protocol.response.CreateGroupResponsePacket;
+import org.example.protocol.response.JoinGroupResponsePacket;
 import org.example.protocol.response.LoginResponsePacket;
 import org.example.protocol.response.MessageResponsePacket;
+import org.example.protocol.response.QuitGroupResponsePacket;
 import org.example.serialize.Serializer;
 import org.example.serialize.impl.JSONSerializer;
 
@@ -17,10 +21,14 @@ import java.util.Map;
 
 import static org.example.protocol.command.Command.CREATE_GROUP_REQUEST;
 import static org.example.protocol.command.Command.CREATE_GROUP_RESPONSE;
+import static org.example.protocol.command.Command.JOIN_GROUP_REQUEST;
+import static org.example.protocol.command.Command.JOIN_GROUP_RESPONSE;
 import static org.example.protocol.command.Command.LOGIN_REQUEST;
 import static org.example.protocol.command.Command.LOGIN_RESPONSE;
 import static org.example.protocol.command.Command.MESSAGE_REQUEST;
 import static org.example.protocol.command.Command.MESSAGE_RESPONSE;
+import static org.example.protocol.command.Command.QUIT_GROUP_REQUEST;
+import static org.example.protocol.command.Command.QUIT_GROUP_RESPONSE;
 
 /**
  * 对数据包进行编码、解码.
@@ -40,6 +48,10 @@ public class PacketCodeC {
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
