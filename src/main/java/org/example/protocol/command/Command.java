@@ -64,4 +64,14 @@ public interface Command {
      * 退出群聊响应指令.
      */
     Byte QUIT_GROUP_RESPONSE = 12;
+
+    /**
+     * 获取群成员请求指令.
+     */
+    Byte LIST_GROUP_REQUEST = 13;
+
+    /**
+     * 获取群成员响应指令.
+     */
+    Byte LIST_GROUP_RESPONSE = 14;
 }

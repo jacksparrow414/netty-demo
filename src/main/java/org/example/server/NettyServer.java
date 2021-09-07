@@ -11,6 +11,7 @@ import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
 import org.example.server.handler.CreateGroupRequestHandler;
 import org.example.server.handler.JoinGroupRequestHandler;
+import org.example.server.handler.ListGroupMembersRequestHandler;
 import org.example.server.handler.LoginRequestHandler;
 import org.example.server.handler.MessageRequestHandler;
 import org.example.server.handler.QuitGroupRequestHandler;
@@ -47,6 +48,7 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new CreateGroupRequestHandler());
                         nioSocketChannel.pipeline().addLast(new JoinGroupRequestHandler());
                         nioSocketChannel.pipeline().addLast(new QuitGroupRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new ListGroupMembersRequestHandler());
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

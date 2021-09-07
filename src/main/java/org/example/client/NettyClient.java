@@ -12,6 +12,7 @@ import org.example.client.console.ConsoleCommandManager;
 import org.example.client.console.LoginConsoleCommand;
 import org.example.client.handler.CreateGroupResponseHandler;
 import org.example.client.handler.JoinGroupResponseHandler;
+import org.example.client.handler.ListGroupMembersResponseHandler;
 import org.example.client.handler.LoginResponseHandler;
 import org.example.client.handler.MessageResponseHandler;
 import org.example.client.handler.QuitGroupResponseHandler;
@@ -57,6 +58,7 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new CreateGroupResponseHandler());
                         socketChannel.pipeline().addLast(new JoinGroupResponseHandler());
                         socketChannel.pipeline().addLast(new QuitGroupResponseHandler());
+                        socketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
