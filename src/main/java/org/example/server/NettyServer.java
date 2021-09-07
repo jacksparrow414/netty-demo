@@ -10,6 +10,7 @@ import org.example.codec.PacketEncoderAndDecoder;
 import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
 import org.example.server.handler.CreateGroupRequestHandler;
+import org.example.server.handler.GroupMessageRequestHandler;
 import org.example.server.handler.JoinGroupRequestHandler;
 import org.example.server.handler.ListGroupMembersRequestHandler;
 import org.example.server.handler.LoginRequestHandler;
@@ -49,6 +50,7 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new JoinGroupRequestHandler());
                         nioSocketChannel.pipeline().addLast(new QuitGroupRequestHandler());
                         nioSocketChannel.pipeline().addLast(new ListGroupMembersRequestHandler());
+                        nioSocketChannel.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

@@ -74,4 +74,14 @@ public interface Command {
      * 获取群成员响应指令.
      */
     Byte LIST_GROUP_RESPONSE = 14;
+
+    /**
+     * 向群聊中发送消息请求指令.
+     */
+    Byte GROUP_MESSAGE_REQUEST = 15;
+
+    /**
+     * 向群聊中发送消息响应指令.
+     */
+    Byte GROUP_MESSAGE_RESPONSE = 16;
 }

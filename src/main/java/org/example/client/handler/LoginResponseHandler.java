@@ -2,14 +2,10 @@ package org.example.client.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.response.LoginResponsePacket;
 import org.example.session.Session;
 import org.example.util.LoginUtil;
 import org.example.util.SessionUtil;
-
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * 直接获得读取数据的对象，不再需要像{@link ClientHandler#channelRead(io.netty.channel.ChannelHandlerContext, java.lang.Object)}那样强转
