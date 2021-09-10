@@ -12,6 +12,7 @@ import org.example.client.console.ConsoleCommandManager;
 import org.example.client.console.LoginConsoleCommand;
 import org.example.client.handler.CreateGroupResponseHandler;
 import org.example.client.handler.GroupMessageResponseHandler;
+import org.example.client.handler.HeartBeatTimerHandler;
 import org.example.client.handler.JoinGroupResponseHandler;
 import org.example.client.handler.ListGroupMembersResponseHandler;
 import org.example.client.handler.LoginResponseHandler;
@@ -22,6 +23,7 @@ import org.example.codec.Spliter;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.request.MessageRequestPacket;
 import org.example.server.handler.CreateGroupRequestHandler;
+import org.example.server.handler.IMIdleStateHandler;
 import org.example.util.LoginUtil;
 import org.example.util.SessionUtil;
 
@@ -52,6 +54,8 @@ public class NettyClient {
                         System.out.println("客户端初始化连接......");
 //                        socketChannel.pipeline().addLast(new FirstClientHandler());
 //                        socketChannel.pipeline().addLast(new ClientHandler());
+                        // 空闲检测
+                        socketChannel.pipeline().addLast(new IMIdleStateHandler());
                         socketChannel.pipeline().addLast(new Spliter());
                         socketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
@@ -61,6 +65,8 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new QuitGroupResponseHandler());
                         socketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
                         socketChannel.pipeline().addLast(new GroupMessageResponseHandler());
+                        // 心跳定时器
+                        socketChannel.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 })
                 .option(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)

@@ -11,6 +11,7 @@ import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
 import org.example.server.handler.CreateGroupRequestHandler;
 import org.example.server.handler.GroupMessageRequestHandler;
+import org.example.server.handler.HeartBeatRequestHandler;
 import org.example.server.handler.IMIdleStateHandler;
 import org.example.server.handler.JoinGroupRequestHandler;
 import org.example.server.handler.ListGroupMembersRequestHandler;
@@ -47,6 +48,8 @@ public class NettyServer {
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         nioSocketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        // 心跳响应不需要登录,所以放在认证Handler的前面
+                        nioSocketChannel.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(new AuthHandler());
                         nioSocketChannel.pipeline().addLast(MessageRequestHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
