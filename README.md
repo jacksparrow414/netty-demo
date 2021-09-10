@@ -31,3 +31,9 @@ TODO
 - 在客户端连接服务器成功之后,服务器保存当前客户端的连接Channel,并给予标识.以便能够根据标识找到对于的客户端连接.
 - 客户端B向客户端A发送消息.消息先发送到服务器,服务器根据客户端B中携带的客户端A的标识,在服务器中找到客户端A的连接.
 - 服务器使用客户端A的的连接Channel,向客户端A发送消息.
+## 一对多群聊实现与原理
+- 所有消息都经过服务器,由服务器做具体ChannelGroup的转发
+- 在客户端创建群聊请求之后,服务器创建ChannelGroup,将当前连接Channel放入add进ChannelGroup.ChannelGroup类似于Map<GroupId, List<Channel>>结构
+- 客户端A向群聊里发送消息,服务器根据携带的ChannelGroup的ID,获得对应的ChannelGroup,调用ChannelGroup.writeAndFlush()方法即可向群发送消息
+- 此时所有客户端B、C,包括A都会收到消息.
+- 退出群聊,则调用ChannelGroup.remove掉当前客户端的Channel即可
