@@ -11,6 +11,7 @@ import org.example.codec.Spliter;
 import org.example.server.handler.AuthHandler;
 import org.example.server.handler.CreateGroupRequestHandler;
 import org.example.server.handler.GroupMessageRequestHandler;
+import org.example.server.handler.IMIdleStateHandler;
 import org.example.server.handler.JoinGroupRequestHandler;
 import org.example.server.handler.ListGroupMembersRequestHandler;
 import org.example.server.handler.LoginRequestHandler;
@@ -41,6 +42,8 @@ public class NettyServer {
                         System.out.println("服务器连接初始化......");
 //                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
 //                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+                        // 空闲监测放在最前面
+                        nioSocketChannel.pipeline().addLast(new IMIdleStateHandler());
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketEncoderAndDecoder());
                         nioSocketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
