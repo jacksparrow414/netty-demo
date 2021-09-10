@@ -18,7 +18,7 @@ import java.util.Date;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
         // 解码
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);

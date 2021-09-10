@@ -1,7 +1,10 @@
 package org.example.server.handler;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.example.protocol.request.LoginRequestPacket;
 import org.example.protocol.response.LoginResponsePacket;
 import org.example.session.Session;
@@ -10,7 +13,11 @@ import org.example.util.SessionUtil;
 
 import java.util.UUID;
 
+@ChannelHandler.Sharable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) {

@@ -1,17 +1,23 @@
 package org.example.server.handler;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.example.protocol.request.MessageRequestPacket;
 import org.example.protocol.response.MessageResponsePacket;
 import org.example.session.Session;
-import org.example.util.LoginUtil;
 import org.example.util.SessionUtil;
 
 import java.util.Date;
 
+@ChannelHandler.Sharable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) {

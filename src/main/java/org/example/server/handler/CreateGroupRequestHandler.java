@@ -1,10 +1,13 @@
 package org.example.server.handler;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.example.protocol.request.CreateGroupRequestPacket;
 import org.example.protocol.response.CreateGroupResponsePacket;
 import org.example.util.IDUtil;
@@ -13,7 +16,14 @@ import org.example.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sharable 意味着该Handler被多个Channle共享
+ */
+@ChannelHandler.Sharable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
+
+    public static final CreateGroupRequestHandler INSTANCE = new CreateGroupRequestHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupRequestPacket createGroupRequestPacket) {

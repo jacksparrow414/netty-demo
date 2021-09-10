@@ -1,8 +1,11 @@
 package org.example.server.handler;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.example.protocol.request.ListGroupMembersRequestPacket;
 import org.example.protocol.response.ListGroupMembersResponsePacket;
 import org.example.session.Session;
@@ -11,7 +14,12 @@ import org.example.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+@ChannelHandler.Sharable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListGroupMembersRequestHandler extends SimpleChannelInboundHandler<ListGroupMembersRequestPacket> {
+
+    public static final ListGroupMembersRequestHandler INSTANCE = new ListGroupMembersRequestHandler();
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ListGroupMembersRequestPacket listGroupMembersRequestPacket) throws Exception {
         String groupId = listGroupMembersRequestPacket.getGroupId();
